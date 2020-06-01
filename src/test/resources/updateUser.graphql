@@ -1,0 +1,7 @@
+mutation updateUser($id: ID!, $score: Int!){
+    user: updateUser(id: $id, score: $score){
+        id
+        name
+        score
+    }
+}

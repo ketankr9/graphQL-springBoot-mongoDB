@@ -1,0 +1,7 @@
+query {
+    users: getTopNUsers(count: 1) {
+        id
+        score
+        name
+    }
+}

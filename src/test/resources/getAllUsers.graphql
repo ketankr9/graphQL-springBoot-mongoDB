@@ -1,0 +1,7 @@
+{
+    users: getAllUsers {
+        id
+        name
+        score
+    }
+}

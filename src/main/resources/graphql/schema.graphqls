@@ -1,0 +1,23 @@
+# Data definition
+type User {
+	id: ID,
+	name: String!,
+	score: Int!
+}
+
+# For fetching the data, read only
+type Query {
+	getAllUsers: [User]
+	getTopNUsers(count: Int):[User]
+#	getUserById(id: String!): User
+}
+
+# For modifying the data
+type Mutation {
+	createUser(name: String!) : User
+	updateUser(id: ID!, score: Int!) : User
+}
+
+#type Subscription {
+#	getRankList: [User]
+#}
