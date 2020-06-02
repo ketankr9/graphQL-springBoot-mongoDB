@@ -19,8 +19,7 @@ public class UserMutation implements GraphQLMutationResolver {
 
     public User createUser(final String name) {
         User user = new User(name, 0);
-        userRepository.save(user);
-        return user;
+        return userRepository.save(user);
     }
 
     public User updateUser(final String id, final Integer score) throws Exception {
@@ -30,8 +29,8 @@ public class UserMutation implements GraphQLMutationResolver {
             User user = optionalUser.get();
             user.setScore(score);
             return userRepository.save(user);
-//            return user;
         }
+
         throw new Exception("User not found with id = "+id);
     }
 

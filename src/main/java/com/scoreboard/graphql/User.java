@@ -45,7 +45,14 @@ public class User {
     public void setScore(Integer score){ this.score = score; }
 
     @Override
+    public boolean equals(Object obj) {
+        return ((User) obj).getId().equals(this.getId())
+                && ((User) obj).getName().equals(this.getName())
+                && ((User) obj).getScore().equals(this.getScore());
+    }
+
+    @Override
     public String toString() {
-        return "User: "+id + ":" + name + ":" + (score);
+        return "User: (id:"+id + ", name:" + name + ", score:" + score + ")";
     }
 }

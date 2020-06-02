@@ -2,7 +2,6 @@ package com.scoreboard.graphql;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.stream.Stream;

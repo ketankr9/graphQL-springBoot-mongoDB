@@ -1,5 +1,5 @@
 .idea/
 springboot-graphql.iml
 target/
-test.sh
+tests.sh
 .oldgit/
