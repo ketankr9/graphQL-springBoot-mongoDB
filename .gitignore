@@ -3,3 +3,4 @@ springboot-graphql.iml
 target/
 tests.sh
 .oldgit/
+src/test/java/com/scoreboard/.DS_Store

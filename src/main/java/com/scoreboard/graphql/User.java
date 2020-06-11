@@ -40,10 +40,13 @@ public class User {
 
     public void setName(String name){ this.name = name; }
 
+    // "id" is managed by spring->data but "setId" function needed while testing.
     public void setId(String id) { this.id = id; }
 
     public void setScore(Integer score){ this.score = score; }
 
+    // if all the values are same, then we will say that the users are same,
+    // unlike object location comparision.
     @Override
     public boolean equals(Object obj) {
         return ((User) obj).getId().equals(this.getId())

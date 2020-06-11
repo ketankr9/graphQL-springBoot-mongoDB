@@ -9,7 +9,7 @@ type User {
 type Query {
 	getAllUsers: [User]
 	getTopNUsers(count: Int):[User]
-#	getUserById(id: String!): User
+	getUserById(id: ID!): User
 }
 
 # For modifying the data
