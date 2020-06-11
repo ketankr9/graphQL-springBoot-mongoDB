@@ -90,4 +90,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>Server Fat Jar File</name>
+            <url>https://github.com/ketankr9/graphQL-springBoot-mongoDB</url>
+        </repository>
+    </distributionManagement>
+
 </project>
