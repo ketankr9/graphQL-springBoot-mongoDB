@@ -30,8 +30,9 @@ public class UserMutation implements GraphQLMutationResolver {
 
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
-            user.setScore(user.getScore()+score);
-            return userRepository.save(user);
+            User tmp = user.deepCopy();
+            tmp.setScore(tmp.getScore()+score);
+            return userRepository.save(tmp);
         }
 
         return null;

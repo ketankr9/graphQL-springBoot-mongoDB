@@ -8,7 +8,6 @@ import com.graphql.spring.boot.test.GraphQLTestTemplate;
 import com.scoreboard.graphql.annotations.MutationTest;
 import com.scoreboard.graphql.annotations.QueryTest;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /*
  *  Based on: https://github.com/graphql-java-kickstart/graphql-spring-boot/blob/4c7cdbaa8b576134bad0370add9241207e267904/example-graphql-tools/src/test/java/com/graphql/sample/boot/GraphQLToolsSampleApplicationTest.java
@@ -34,9 +32,6 @@ public class ApplicationTest {
 
     @Autowired
     private GraphQLTestTemplate graphQLTestTemplate;
-
-    @MockBean
-    private UserMutation userMutation;
 
     @MockBean
     private UserRepository userRepository;
@@ -54,15 +49,6 @@ public class ApplicationTest {
         System.out.println(response.context().jsonString());
     }
 
-    public void assertSingleUser(){
-        assertTrue(response.isOk());
-        System.out.println(response.context().jsonString());
-
-        User u1 = response.context().read("$.data.user", User.class);
-        assertNotNull(u1, "{\"user\":null}");
-        assertEquals(user, u1, "User Not Same");
-    }
-
     public void assertMultipleUser(){
         assertTrue(response.isOk());
         assertTrue(Integer.parseInt(response.get("$.data.users.length()")) > 0, "0 Users Returns");
@@ -72,80 +58,85 @@ public class ApplicationTest {
     @Test
     @QueryTest(withArgs = true)
     public void getTopNUsersCount() throws IOException {
-
+        // given
         when(userRepository.findByScoreIsGreaterThanOrderByScoreDesc(0))
                 .thenReturn(Stream.of(user));
 
+        // when
         response = graphQLTestTemplate.postForResource("getTopNUsersCount.graphql");
 
+        // then
         assertMultipleUser();
     }
 
     @Test
     @QueryTest
     public void getTopNUsers() throws IOException {
-
+        // given
         when(userRepository.findByScoreIsGreaterThanOrderByScoreDesc(0))
                 .thenReturn(Stream.of(user));
 
+        // when
         response = graphQLTestTemplate.postForResource("getTopNUsers.graphql");
 
+        // then
         assertMultipleUser();
     }
 
     @Test
     @QueryTest
     public void getAllUsers() throws IOException {
-
+        // given
         when(userRepository.findAll())
                 .thenReturn(Collections.singletonList(user));
 
+        // when
         response = graphQLTestTemplate.postForResource("getAllUsers.graphql");
 
+        // then
         assertMultipleUser();
     }
 
-    @Disabled
     @Test
     @MutationTest
     public void createUser() throws IOException {
+        // given
         user.setScore(0);
-        // This fails.
-        when(userRepository.save( eq(user) )).thenReturn(user);
-        System.out.println(userRepository.save(user));
-        // This works.
-//        when(userMutation.createUser(eq(user.getName()))).thenReturn(user);
+        when(userRepository.save( any(User.class) )).thenReturn(user);
 
+        //when
         ObjectNode variables = new ObjectMapper().createObjectNode()
                 .put("name", user.getName());
-
         response = graphQLTestTemplate.perform("createUser.graphql", variables);
 
-        assertSingleUser();
+        //then
+        assertTrue(response.isOk());
+        User u1 = response.context().read("$.data.user", User.class);
+        assertNotNull(u1, "{\"user\":null}");
+        assertEquals(user, u1, "User Not Same");
     }
 
-    @Disabled
     @Test
     @MutationTest
     public void updateUser() throws Exception {
-        /* This fails the test. */
+        // given
+        int scoreIncr = 9879;
+        User updatedUser = user.deepCopy(); updatedUser.setScore(updatedUser.getScore()+scoreIncr);
+
         when(userRepository.findById( eq(user.getId()) )).thenReturn(Optional.of(user));
-        System.out.println(userRepository.findById(user.getId()));
+        when(userRepository.save( eq(updatedUser) )).thenReturn(updatedUser);
 
-        when(userRepository.save( eq(user) )).thenReturn(user);
-        System.out.println(userRepository.save(user));
-
-        /* Where as this passes. */
-//        when(userMutation.updateUser(eq(user.getId()), eq(user.getScore())))
-//                .thenReturn(user);
-
+        // when
         ObjectNode variables = new ObjectMapper().createObjectNode()
                 .put("id", user.getId())
-                .put("score", user.getScore());
-
+                .put("score", scoreIncr);
         response = graphQLTestTemplate.perform("updateUser.graphql", variables);
 
-        assertSingleUser();
+        //then
+        assertTrue(response.isOk());
+        User u1 = response.context().read("$.data.user", User.class);
+        assertNotNull(u1, "{\"user\":null}");
+        assertEquals(updatedUser, u1, "User Not Same");
     }
 
 }

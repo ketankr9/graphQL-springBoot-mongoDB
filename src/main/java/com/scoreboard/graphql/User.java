@@ -45,6 +45,12 @@ public class User {
 
     public void setScore(Integer score){ this.score = score; }
 
+    public User deepCopy(){
+        User newUser = new User(this.getName(), this.getScore());
+        newUser.setId(this.getId());
+        return newUser;
+    }
+
     // if all the values are same, then we will say that the users are same,
     // unlike object location comparision.
     @Override
@@ -58,4 +64,5 @@ public class User {
     public String toString() {
         return "User: (id:"+id + ", name:" + name + ", score:" + score + ")";
     }
+
 }
