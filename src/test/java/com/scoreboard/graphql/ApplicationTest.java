@@ -51,8 +51,10 @@ public class ApplicationTest {
 
     public void assertMultipleUser(){
         assertTrue(response.isOk());
-        assertTrue(Integer.parseInt(response.get("$.data.users.length()")) > 0, "0 Users Returns");
+        assertTrue(Integer.parseInt(response.get("$.data.users.length()")) > 0, "0 Users Returned in response");
         assertEquals(user, response.context().read("$.data.users[0]", User.class), "User Not Same");
+        // a graphql query should never modify data
+        verify(userRepository, never()).save(any());
     }
 
     @Test
