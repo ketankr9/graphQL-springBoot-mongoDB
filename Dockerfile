@@ -12,7 +12,7 @@ FROM maven:3.6.3-openjdk-11 AS build
 RUN mkdir -p /usr/src/app/src 
 COPY src /usr/src/app/src
 COPY pom.xml /usr/src/app
-RUN mvn -f /usr/src/app/pom.xml clean package
+RUN mvn -f /usr/src/app/pom.xml package
 
 FROM gcr.io/distroless/java
 COPY --from=build /usr/src/app/target/*.jar /usr/app/graphqlServer.jar

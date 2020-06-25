@@ -9,5 +9,5 @@ import static java.lang.annotation.RetentionPolicy.CLASS;
 @Retention(CLASS)
 @Target(METHOD)
 public @interface QueryTest {
-    boolean withArgs() default false;
+  boolean withArgs() default false;
 }

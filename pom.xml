@@ -68,13 +68,13 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!-- For Automatic Restart Feature: DevTools -->
+        <!-- For Automatic Restart Feature: DevTools
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
-
+        -->
         <!--   enable metrics collection using prometheus     -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

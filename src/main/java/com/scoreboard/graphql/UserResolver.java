@@ -7,11 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserResolver implements GraphQLResolver<User> {
 
-    private final UserRepository userRepository ;
+  private final UserRepository userRepository;
 
-    @Autowired
-    public UserResolver(UserRepository userRepository) {
-        this.userRepository = userRepository ;
-    }
-
+  @Autowired
+  public UserResolver(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 }

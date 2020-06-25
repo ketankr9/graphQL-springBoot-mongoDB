@@ -9,33 +9,35 @@ import java.util.Optional;
 @Component
 public class UserMutation implements GraphQLMutationResolver {
 
-    private UserRepository userRepository;
+  private UserRepository userRepository;
 
-    @Autowired
-    public UserMutation(UserRepository userRepository){
-        this.userRepository = userRepository;
+  @Autowired
+  public UserMutation(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
+  // function name should be exactly same as that defined in the graphql Schema
+  // -> "createUser"
+  public User createUser(final String name) {
+    // every new user gets score=0
+    User user = new User(name, 0);
+    return userRepository.save(user);
+  }
+
+  // both "id" and "score" are mandatory parameter as defined in the graphql
+  // Schema.
+  public User updateUser(final String id, final Integer score)
+      throws Exception {
+    // findById is already implemented by mongodb repository
+    Optional<User> optionalUser = userRepository.findById(id);
+
+    if (optionalUser.isPresent()) {
+      User user = optionalUser.get();
+      User tmp = user.deepCopy();
+      tmp.setScore(tmp.getScore() + score);
+      return userRepository.save(tmp);
     }
 
-    // function name should be exactly same as that defined in the graphql Schema -> "createUser"
-    public User createUser(final String name) {
-        // every new user gets score=0
-        User user = new User(name, 0);
-        return userRepository.save(user);
-    }
-
-    // both "id" and "score" are mandatory parameter as defined in the graphql Schema.
-    public User updateUser(final String id, final Integer score) throws Exception {
-        // findById is already implemented by mongodb repository
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if(optionalUser.isPresent()){
-            User user = optionalUser.get();
-            User tmp = user.deepCopy();
-            tmp.setScore(tmp.getScore()+score);
-            return userRepository.save(tmp);
-        }
-
-        return null;
-    }
-
+    return null;
+  }
 }
